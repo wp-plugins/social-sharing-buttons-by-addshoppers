@@ -274,27 +274,6 @@ function shop_pe_plugin_admin_validate( $input ) {
 }
 endif;
 
-// Add settings link on plugin page
-function addshoppers_settings_link($links) { 
-  $settings_link = '<a href="options-general.php?page=shop-pe-plugin">Settings</a>'; 
-  array_unshift($links, $settings_link); 
-  return $links; 
-}
-$plugin = plugin_basename(__FILE__); 
-add_filter("plugin_action_links_$plugin", 'addshoppers_settings_link' );
-
-
-// Additional links on the plugin page (description)
-function addshoppers_settings_metalinks($links, $file) {
-	$plugin = plugin_basename(__FILE__); 
-	if ($file == $plugin) {
-		$links[] = '<a href="options-general.php?page=shop-pe-plugin">' . __('Settings','addshoppers') . '</a>';
-		$links[] = '<a href="http://wordpress.org/support/view/plugin-reviews/' . AS_WP_ORG_PLUGIN_SLUG . '" target="_blank">' . __('Review our plugin!','addshoppers') . '</a>';
-	}
-	return $links;
-}
-add_filter('plugin_row_meta', 'addshoppers_settings_metalinks',10,2);
-
 // check if WooCommerce is installed
 function woocommerce_is_installed() {
 	if ( function_exists( 'woocommerce_thankyou' ) ) return true;

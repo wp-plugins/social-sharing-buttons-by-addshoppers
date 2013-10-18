@@ -14,7 +14,7 @@ Version: 1.1
 Author URI: http://www.addshoppers.com/
 */
 
-define("AS_WP_ORG_PLUGIN_SLUG", "addshoppers");
+define("AS_WP_ORG_PLUGIN_SLUG", "social-sharing-buttons-by-addshoppers");
 define("AS_DEFAULT_SHOP_ID", "500975935b3a42793000002b");
 define("AS_PLUGIN_FOLDER", plugin_dir_url( __FILE__ ));
 define("AS_PLUGIN_IMG_FOLDER", plugin_dir_url( __FILE__ ) . "images/");
@@ -52,6 +52,26 @@ function shop_pe_plugin_wp_footer() {
 endif;
 add_action( 'wp_footer', 'shop_pe_plugin_wp_footer' );
 
+// Add settings link on plugin page
+function addshoppers_settings_link($links) { 
+  $settings_link = '<a href="options-general.php?page=shop-pe-plugin">Settings</a>'; 
+  array_unshift($links, $settings_link); 
+  return $links; 
+}
+$plugin = plugin_basename(__FILE__); 
+add_filter("plugin_action_links_$plugin", 'addshoppers_settings_link' );
+
+
+// Additional links on the plugin page (description)
+function addshoppers_settings_metalinks($links, $file) {
+	$plugin = plugin_basename(__FILE__); 
+	if ($file == $plugin) {
+		$links[] = '<a href="options-general.php?page=shop-pe-plugin">' . __('Settings','addshoppers') . '</a>';
+		$links[] = '<a href="http://wordpress.org/support/view/plugin-reviews/' . AS_WP_ORG_PLUGIN_SLUG . '" target="_blank">' . __('Review our plugin!','addshoppers') . '</a>';
+	}
+	return $links;
+}
+add_filter('plugin_row_meta', 'addshoppers_settings_metalinks',10,2);
 
 
 require_once( dirname( __FILE__ ) . '/plugin-options.php' );

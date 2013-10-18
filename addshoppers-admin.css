@@ -8,6 +8,9 @@
 	padding-left: 46px;
 	float: left;
 }
+.addshoppers h2 {
+	display: inline-block;
+}
 .addshoppers div.nav-tab-wrapper {
 	padding-top: 20px;
 	border-bottom: 1px solid #9C9C9C;

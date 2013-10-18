@@ -159,7 +159,7 @@ function show_settings_form($options) {
                         <td>
                         	<?php 
                         	// if WooCommerce is detected
-                        	if (!woocommerce_is_installed()) {
+                        	if (woocommerce_is_installed()) {
                         		$ecom = true; 
                         		show_roi_tracking_admin('WooCommerce', $options);
                         	 } 

@@ -15,7 +15,7 @@ Author URI: http://www.addshoppers.com/
 */
 
 define("AS_WP_ORG_PLUGIN_SLUG", "social-sharing-buttons-by-addshoppers");
-define("AS_DEFAULT_SHOP_ID", "500975935b3a42793000002b");
+define("AS_DEFAULT_SHOP_ID", "528db56da387646ecd552524");
 define("AS_PLUGIN_FOLDER", plugin_dir_url( __FILE__ ));
 define("AS_PLUGIN_IMG_FOLDER", plugin_dir_url( __FILE__ ) . "images/");
 

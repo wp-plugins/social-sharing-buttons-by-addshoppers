@@ -28,7 +28,7 @@ if ( ! function_exists( 'shop_pe_plugin_wp_footer' ) ):
 function shop_pe_plugin_wp_footer() {
     $options = get_option( 'shop_pe_options' );
 
-    if ( empty( $options['default_buttons'] ) == false ) {
+    if ( $options['default_buttons'] != 0 ) {
     
     	if ( empty( $options['shop_id']) )  { $options['shop_id'] = AS_DEFAULT_SHOP_ID; }
     	

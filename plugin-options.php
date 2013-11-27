@@ -242,6 +242,7 @@ function shop_pe_plugin_admin_validate( $input ) {
     }
 	
 	// default buttons
+    if (!$input['default_buttons']) $input['default_buttons'] = 0;
     $options['default_buttons'] = $input['default_buttons'];
     
     // networks to show
@@ -276,18 +277,18 @@ endif;
 
 // check if WooCommerce is installed
 function woocommerce_is_installed() {
-	if ( function_exists( 'woocommerce_thankyou' ) ) return true;
+	if ( has_action( 'woocommerce_thankyou' ) ) return true;
 	else return false;
 }
 
 // check if eShop is installed
 function eshop_is_installed() {
-	if ( function_exists( 'eshop_on_success' ) ) return true;
+	if ( has_action( 'eshop_on_success' ) ) return true;
 	else return false;
 }
 
 // install ROI tracking in WooCommerce if installed
-if ( function_exists( 'woocommerce_thankyou' ) ):
+if ( has_action( 'woocommerce_thankyou' ) ):
 	$options = get_option( 'shop_pe_options' );
 	if ($options['disable_woocommerce_roi'] != 1 && !empty($options['shop_id'])):
 		add_action( 'woocommerce_thankyou', 'addshoppers_roi_tracking' );
@@ -300,7 +301,7 @@ if ( function_exists( 'woocommerce_thankyou' ) ):
 endif;
 
 // install ROI tracking in eShop if installed
-if ( function_exists( 'eshop_on_success' ) ):
+if ( has_action( 'eshop_on_success' ) ):
 	$options = get_option( 'shop_pe_options' );
 	if ($options['disable_eshop_roi'] != 1 && !empty($options['shop_id'])):
 		add_action( 'eshop_on_success', 'addshoppers_roi_tracking' );

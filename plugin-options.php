@@ -47,12 +47,22 @@ add_action( 'admin_menu', 'shop_pe_plugin_admin_add_page' );
  *
  * @since WPShopPe 1.0
  */
-function my_enqueue($hook) {
+function addshoppers_admin_css($hook) {
     if( 'settings_page_shop-pe-plugin' != $hook )
         return;
     wp_enqueue_style( 'addshoppers_admin_css', AS_PLUGIN_FOLDER . 'addshoppers-admin.css' );
 }
-add_action( 'admin_enqueue_scripts', 'my_enqueue' );
+add_action( 'admin_enqueue_scripts', 'addshoppers_admin_css' );
+
+/**
+ * Include responsive CSS
+ *
+ * @since WPShopPe 1.2
+ */
+function addshoppers_responsive_css($hook) {
+    wp_enqueue_style( 'addshoppers_responsive_css', AS_PLUGIN_FOLDER . 'addshoppers-responsive.css' );
+}
+add_action( 'wp_enqueue_scripts', 'addshoppers_responsive_css' );
 
 
 if ( ! function_exists( 'shop_pe_plugin_admin_do_page' ) ):

@@ -1,6 +1,6 @@
 <?php
 /*
-Social Login functions
+AddShoppers Social Login functions
 since 1.3
 */
 

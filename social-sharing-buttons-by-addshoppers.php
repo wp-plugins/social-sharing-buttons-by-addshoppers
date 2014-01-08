@@ -75,3 +75,4 @@ add_filter('plugin_row_meta', 'addshoppers_settings_metalinks',10,2);
 
 
 require_once( dirname( __FILE__ ) . '/plugin-options.php' );
+require_once( dirname( __FILE__ ) . '/social-login.php' );

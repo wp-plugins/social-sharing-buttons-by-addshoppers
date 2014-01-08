@@ -170,3 +170,9 @@ Form stuff
 .addshoppers input.network_select.kaboodle[type=checkbox] + label {
 	background-position: -120px 0;
 }
+.addshoppers input.network_select.linkedin[type=checkbox] + label {
+	background-position: -264px 0;
+}
+.addshoppers input.network_select.paypal[type=checkbox] + label {
+	background-position: -288px 0;
+}

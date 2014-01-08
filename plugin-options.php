@@ -47,12 +47,22 @@ add_action( 'admin_menu', 'shop_pe_plugin_admin_add_page' );
  *
  * @since WPShopPe 1.0
  */
-function my_enqueue($hook) {
+function addshoppers_admin_css($hook) {
     if( 'settings_page_shop-pe-plugin' != $hook )
         return;
     wp_enqueue_style( 'addshoppers_admin_css', AS_PLUGIN_FOLDER . 'addshoppers-admin.css' );
 }
-add_action( 'admin_enqueue_scripts', 'my_enqueue' );
+add_action( 'admin_enqueue_scripts', 'addshoppers_admin_css' );
+
+/**
+ * Include responsive CSS
+ *
+ * @since WPShopPe 1.2
+ */
+function addshoppers_responsive_css($hook) {
+    wp_enqueue_style( 'addshoppers_responsive_css', AS_PLUGIN_FOLDER . 'addshoppers-responsive.css' );
+}
+add_action( 'wp_enqueue_scripts', 'addshoppers_responsive_css' );
 
 
 if ( ! function_exists( 'shop_pe_plugin_admin_do_page' ) ):
@@ -125,6 +135,7 @@ function show_as_dashboard($shop_id) {
 function show_settings_form($options) {
     $all_networks = addshoppers_networks('all');
     if (!$options['selected_networks']) $options['selected_networks'] = addshoppers_networks('default'); 
+    if (!$options['login_networks']) $options['login_networks'] = array(); 
 ?>
         <form method="post" action="options.php" class="settings">
             <?php settings_fields( 'shop_pe_plugin_options' ); ?>
@@ -134,14 +145,21 @@ function show_settings_form($options) {
                         <th scope="row">Shop ID</th>
                         <td>
                             <input id="shop-id" class="regular-text" type="text" name="shop_pe_options[shop_id]" value="<?php echo( $options['shop_id'] ); ?>" placeholder="Your ID" />
-                            <p class="description">(Optional) Enter your shop ID if you want to track the analytics of your sharing buttons. <br/>You can get your shop ID or sign up for one <a href="https://www.addshoppers.com/merchants">here</a>. Go to &rarr; Settings &rarr; Shops and copy the Shop ID for your shop into the field above.</p>
+                            <p class="description">(Optional) Enter your shop ID if you want to track the analytics of your sharing buttons. <br/>You can get your shop ID or sign up for one <a href="https://www.addshoppers.com/merchants" target="_blank">here</a>. Go to your profile (top right), then Settings &rarr; Shops and copy the Shop ID for your shop into the field above.</p>
+                        </td>
+                     </tr>
+                     <tr>
+                        <th scope="row">API Secret</th>
+                        <td>
+                            <input id="api-secret" class="regular-text" type="text" name="shop_pe_options[api_secret]" value="<?php echo( $options['api_secret'] ); ?>" placeholder="Your API Secret" />
+                            <p class="description">(Only necessary for AddShoppers Social Login) <br/>You can get your API Secret from your <a href="https://www.addshoppers.com/merchants" target="_blank">AddShoppers dashboard</a>. Go to your profile (top right), then Settings &rarr; API and copy the API Secret (not API Key) for your shop into the field above</p>
                         </td>
                      </tr>
                       <tr>
                         <th scope="row">Show Floating Buttons</th>
                         <td>
                             <input id="default-buttons" type="checkbox" name="shop_pe_options[default_buttons]" value="1" <?php if ($options['default_buttons'] == 1 ) echo 'checked="checked" '; ?>/>
-                            <p class="description">Check this box to show the default floating buttons. If you want different buttons, grab the code for the buttons you want in your <a href="https://www.addshoppers.com/merchants">AddShoppers Dashboard</a> under Apps &rarr; Sharing Buttons. Copy and paste the code for your buttons into the desired location in your active theme.</p>
+                            <p class="description">Check this box to show the default floating buttons. If you want different buttons, grab the code for the buttons you want in your <a href="https://www.addshoppers.com/merchants" target="_blank">AddShoppers Dashboard</a> under Apps &rarr; Sharing Buttons. Copy and paste the code for your buttons into the desired location in your active theme.</p>
                         </td>
                     </tr>
                     <tr>
@@ -154,6 +172,15 @@ function show_settings_form($options) {
                             <p class="description">Select the networks that you want in your sharing button set.</p>
                         </td>
                     </tr>
+	<?php if (woocommerce_is_installed()) { ?>         
+                    <tr>
+                        <th scope="row">Show Share for Coupon Button on Cart Page</th>
+                        <td>
+                            <input id="show-coupon-button-woocommerce-cart" type="checkbox" name="shop_pe_options[show_coupon_button_woocommerce_cart]" value="1" <?php if ($options['show_coupon_button_woocommerce_cart'] == 1 ) echo 'checked="checked" '; ?>/>
+                            <p class="description">Check this box to show a Share for Coupon button right below your Enter Coupon Code box (great for increasing conversions!). Make sure you set up a Social Reward first!</p>
+                        </td>
+                    </tr>
+    <?php } ?>
                     <tr>
                         <th scope="row">ROI Tracking</th>
                         <td>
@@ -172,6 +199,47 @@ function show_settings_form($options) {
                         	if (!$ecom) { ?>
                         		<p class="description">We haven't detected an eCommerce plugin installed on your WordPress site that we have an automatic integration with. If you want to track ROI, please install manually. Check <a target="_blank" href="http://help.addshoppers.com/customer/portal/topics/315555-installation/articles">here</a> for installation instructions or <a href="http://help.addshoppers.com" target="_blank">contact us</a> if you need help.</p>
                         	<?php } ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Social Login</th>
+                        <td>
+                        	<?php 
+                        	// if WooCommerce is detected
+                        	if (woocommerce_is_installed()) {
+                        		$lower_name="woocommerce";
+                        		$login_networks = addshoppers_networks('login');
+                        		?>
+                        		
+                        		<p style="margin-bottom: 10px;"><input id="show-<?php echo $lower_name; ?>-social-login" type="checkbox" name="shop_pe_options[show_<?php echo $lower_name; ?>_social_login]" value="1" <?php if ($options['show_' . $lower_name . '_social_login'] == 1 ) echo 'checked="checked" '; ?>/> Show social login buttons above login/register form</p>
+                        		                        		
+                        		<?php foreach ($login_networks as $key => $display) { ?>
+                        		<input id="login-networks-<?php echo $key; ?>" class="network_select <?php echo $key; ?>" type="checkbox" name="shop_pe_options[login_networks][]" value="<?php echo $key; ?>" <?php if (in_array($key,$options['login_networks'])) echo 'checked="checked" '; ?>/> <label for="login-networks-<?php echo $key; ?>"></label>
+                        		<?php } ?>
+                        		<p class="description">Select which networks to offer social login.</p>
+                        		
+                        	<?php
+                        		/*	
+                        		<p><input id="show-<?php echo $lower_name; ?>-social-login-login" type="checkbox" name="shop_pe_options[show_<?php echo $lower_name; ?>_social_login_login]" value="1" <?php if ($options['show_' . $lower_name . '_social_login_login'] == 1 ) echo 'checked="checked" '; ?>/> Show above login form</p>
+                        		                        		
+                        		<p><input id="show-<?php echo $lower_name; ?>-social-login-registration" type="checkbox" name="shop_pe_options[show_<?php echo $lower_name; ?>_social_login_registration]" value="1" <?php if ($options['show_' . $lower_name . '_social_login_registration'] == 1 ) echo 'checked="checked" '; ?>/> Show above registration form</p>
+                        		*/
+                        	?>
+                        	                        		                        		                        		
+                        		<?php
+                        	}                   	
+                        	// if no eCommerce plugins detected
+                        	if (!$ecom) { ?>
+                        		
+								<p class="description">To install Social Login, use the following PHP function in your login/registration page templates: </p>
+								<pre>addshoppers_show_social_login($networks,$size)</pre>
+								<p><b>$networks</b>: Replace with a comma separated list of the networks you want to use for login. Possible values are <b>facebook</b>, <b>google</b>, <b>linkedin</b>, and <b>paypal</b>. </p>
+								<p><b>$size</b>: Replace with the size of the social login buttons that you want. Possible values are <b>small</b>, <b>medium</b>, or <b>large</b>. </p>
+								<p><b>Here's an example to show Facebook and Google+ social login buttons, medium size:</b></p>
+								<pre>&lt;?php addshoppers_show_social_login(&#39;facebook,google&#39;,&#39;medium&#39;); ?&gt;</pre>
+                        	<?php } ?>
+                        	
+                        	<p class="description">Make sure you have your API Secret set above or social login won't work!</p>
                         </td>
                     </tr>
                 </tbody>
@@ -203,6 +271,12 @@ function addshoppers_networks($which) {
 		'twitter',
 		'email',
 		'google'
+	);
+	$networks['login'] = array(
+		'facebook' => 'Facebook',
+		'google' => 'Google Plus',
+		'paypal' => 'Paypal',
+		'linkedin' => 'Linkedin'
 	);
 	return $networks[$which];
 }
@@ -241,7 +315,10 @@ function shop_pe_plugin_admin_validate( $input ) {
         }
     }
 	
+	$options['api_secret'] = $input['api_secret'];
+	
 	// default buttons
+    if (!$input['default_buttons']) $input['default_buttons'] = 0;
     $options['default_buttons'] = $input['default_buttons'];
     
     // networks to show
@@ -258,6 +335,23 @@ function shop_pe_plugin_admin_validate( $input ) {
     		}
     	}
     }
+    
+    // WooCommerce Share for Coupon button
+    $options['show_coupon_button_woocommerce_cart'] = $input['show_coupon_button_woocommerce_cart'];
+    
+    // social login buttons to show
+	$login_networks = addshoppers_networks('login');
+    $options['login_networks'] = array();
+    foreach ($input['login_networks'] as $network) {
+    	if (array_key_exists($network,$login_networks)) {
+    		$options['login_networks'][] = $network;
+    	}
+    }
+    
+    // social login integrations
+    $options['show_woocommerce_social_login'] = $input['show_woocommerce_social_login'];
+    //$options['show_woocommerce_social_login_login'] = $input['show_woocommerce_social_login_login'];
+   // $options['show_woocommerce_social_login_registration'] = $input['show_woocommerce_social_login_registration'];
     
     // roi integrations
     $options['disable_woocommerce_roi'] = $input['disable_woocommerce_roi'];
@@ -276,18 +370,62 @@ endif;
 
 // check if WooCommerce is installed
 function woocommerce_is_installed() {
-	if ( function_exists( 'woocommerce_thankyou' ) ) return true;
+	if ( has_action( 'woocommerce_thankyou' ) ) return true;
 	else return false;
 }
 
 // check if eShop is installed
 function eshop_is_installed() {
-	if ( function_exists( 'eshop_on_success' ) ) return true;
+	if ( has_action( 'eshop_on_success' ) ) return true;
 	else return false;
 }
 
+// grab the saved options
+	$options = get_option( 'shop_pe_options' );
+
+// attach Share for Coupon button fuction to hook on WooCommerce cart page, if enabled
+	if ($options['show_coupon_button_woocommerce_cart'] == 1 && !empty($options['shop_id']) ){
+		add_action( 'woocommerce_cart_coupon', 'addshoppers_coupon_button' );
+	}
+
+function addshoppers_coupon_button() {
+	echo '<br /><div class="share-buttons share-buttons-panel" data-style="coupon" style="margin-top: 5px;"></div>';
+}
+
+
+// attach WooCommerce social login action to hook, if enabled
+	if ($options['show_woocommerce_social_login'] == 1 && !empty($options['login_networks']) && !empty($options['shop_id']) && !empty($options['api_secret'])):
+		add_action( 'woocommerce_before_customer_login_form', 'addshoppers_woocommerce_social_login' );
+	endif;
+
+function addshoppers_woocommerce_social_login() {
+	$options = get_option( 'shop_pe_options' );
+	addshoppers_show_social_login(implode($options['login_networks'],','),'medium');
+}
+
+/*
+Social Login hooks that will be released in a later WooCommerce version
+
+// show social login buttons in WooCommerce login form if enabled
+if ( has_action( 'woocommerce_login_form_start' ) ):
+	$options = get_option( 'shop_pe_options' );
+	if ($options['show_woocommerce_social_login_registration'] == 1 && !empty($options['shop_id']) && !empty($options['api_secret'])):
+		add_action( 'woocommerce_login_form_start', 'addshoppers_woocommerce_social_login' );
+	endif;
+endif;
+
+// show social login buttons in WooCommerce registration form if enabled
+if ( has_action( 'woocommerce_register_form_start' ) ):
+	$options = get_option( 'shop_pe_options' );
+	if ($options['show_woocommerce_social_login_login'] == 1 && !empty($options['shop_id']) && !empty($options['api_secret'])):
+		add_action( 'woocommerce_register_form_start', 'addshoppers_woocommerce_social_login' );
+	endif;
+endif;
+*/
+
+
 // install ROI tracking in WooCommerce if installed
-if ( function_exists( 'woocommerce_thankyou' ) ):
+if ( has_action( 'woocommerce_thankyou' ) ):
 	$options = get_option( 'shop_pe_options' );
 	if ($options['disable_woocommerce_roi'] != 1 && !empty($options['shop_id'])):
 		add_action( 'woocommerce_thankyou', 'addshoppers_roi_tracking' );
@@ -300,7 +438,7 @@ if ( function_exists( 'woocommerce_thankyou' ) ):
 endif;
 
 // install ROI tracking in eShop if installed
-if ( function_exists( 'eshop_on_success' ) ):
+if ( has_action( 'eshop_on_success' ) ):
 	$options = get_option( 'shop_pe_options' );
 	if ($options['disable_eshop_roi'] != 1 && !empty($options['shop_id'])):
 		add_action( 'eshop_on_success', 'addshoppers_roi_tracking' );

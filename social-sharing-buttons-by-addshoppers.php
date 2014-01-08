@@ -3,14 +3,14 @@
  * AddShoppers Plugin
  *
  * @package WPShopPe
- * @version 1.1
+ * @version 1.2
  */
 /*
 Plugin Name: Social Sharing Buttons By AddShoppers
 Plugin URI: http://www.addshoppers.com/
 Description: Add smart sharing buttons and advanced social analytics with the AddShoppers plugin for WordPress. More social apps are also available at <a href="http://www.addshoppers.com/">http://www.addshoppers.com/</a>.
 Author: AddShoppers
-Version: 1.1
+Version: 1.2
 Author URI: http://www.addshoppers.com/
 */
 
@@ -28,7 +28,7 @@ if ( ! function_exists( 'shop_pe_plugin_wp_footer' ) ):
 function shop_pe_plugin_wp_footer() {
     $options = get_option( 'shop_pe_options' );
 
-    if ( empty( $options['default_buttons'] ) == false ) {
+    if ( $options['default_buttons'] != 0 ) {
     
     	if ( empty( $options['shop_id']) )  { $options['shop_id'] = AS_DEFAULT_SHOP_ID; }
     	
@@ -75,3 +75,4 @@ add_filter('plugin_row_meta', 'addshoppers_settings_metalinks',10,2);
 
 
 require_once( dirname( __FILE__ ) . '/plugin-options.php' );
+require_once( dirname( __FILE__ ) . '/social-login.php' );

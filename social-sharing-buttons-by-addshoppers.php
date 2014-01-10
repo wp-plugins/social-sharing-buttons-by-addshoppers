@@ -41,7 +41,7 @@ function shop_pe_plugin_wp_footer() {
 	
 	<!-- AddShoppers.com Social Analytics --> 
 	<script type="text/javascript">
-	AddShoppersTracking = {image: ''};
+	AddShoppersTracking = { lang: { widget: '<?php echo get_locale(); ?>' } }
 	var js = document.createElement('script'); js.type = 'text/javascript'; js.async = true; js.id = 'AddShoppers';
 	js.src = ('https:' == document.location.protocol ? 'https://shop.pe/widget/' : 'http://cdn.shop.pe/widget/') + "widget_async.js#<?php echo( $options['shop_id'] ); ?>"; 
 	document.getElementsByTagName("head")[0].appendChild(js);

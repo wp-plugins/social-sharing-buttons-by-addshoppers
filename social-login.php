@@ -33,7 +33,8 @@ function addshoppers_social_login_js() {
 			if ("google_picture" in data) {
 				data.google_picture = data.google_picture.replace('http', 'h--p');
 			}
-			window.location.href = '/?action=addshoppers_social_login&as_signature=' + JSON.stringify(data) + '&redirect_to=' + window.location.href;
+			//window.location.href = '<?php echo site_url(); ?>/?action=addshoppers_social_login&as_signature=' + JSON.stringify(data) + '&redirect_to=' + encodeURIComponent(window.location.href);
+			postLoginData(JSON.stringify(data));
 		}
 	}
 	if (window.addEventListener) {			
@@ -46,9 +47,36 @@ function addshoppers_social_login_js() {
 	    } 
 	  }					
 	} 
+	function postLoginData(data) {
+ 
+  		// Send the data using post
+  		var posting = jQuery.post( '<?php echo site_url("/"); ?>', { action: 'addshoppers_social_login', as_signature: data } );
+ 
+  		// Put the results in a div
+  		posting.done(function(data) {
+    		// refresh page
+    		location.reload();
+  		});
+	}
 	</script>
 	<?php
 }
+
+/*
+Social Login Shortcode
+*/
+
+function addshoppers_social_login_shortcode( $atts ){
+	$stuff = shortcode_atts( array(
+		'networks' => 'facebook,',
+		'size' => 'medium',
+	), $atts );
+
+	addshoppers_show_social_login($stuff['networks'],$stuff['size']);
+
+	return;
+}
+add_shortcode( 'AddShoppersSocialLogin', 'addshoppers_social_login_shortcode' );
 
 function addshoppers_social_login() {
 
@@ -76,7 +104,7 @@ function addshoppers_social_login() {
 		return;
 	}
 	
-	$response = addshoppers_verify_data($_GET['as_signature'],$options['api_secret']);
+	$response = addshoppers_verify_data($_POST['as_signature'],$options['api_secret']);
 	
 	if ($response['error']) { 
 		return;
@@ -113,8 +141,8 @@ function addshoppers_social_login() {
 	}
 	
     wp_set_auth_cookie( $user_id );
-
-	wp_safe_redirect( $redirect_to );
+		
+	//wp_safe_redirect( $redirect_to );
 
 	exit();
 }

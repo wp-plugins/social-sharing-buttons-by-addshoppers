@@ -1,7 +1,7 @@
 === Sharing Buttons & Analytics by AddShoppers ===
 Contributors: AddShoppers 
 Donate link: 
-Tags: addshoppers, sharing buttons, share button, social buttons, social sharing, ecommerce, social analytics, addthis, sharethis, woocommerce, e-commerce, AddThis, addtoany, admin, bookmark, bookmarking, bookmarks, button, del.icio.us,Digg, e-mail, email, Facebook, facebook like, google, google plus, google plus one, icon, icons,image, images, Like, linkedin, links, lockerz, messenger, myspace, page, pages, pin, pin it, pinit,pinterest, plugin, plus 1, plus one, Post, posts, Reddit, save, seo, sexybookmarks, Share,Shareaholic, sharedaddy, sharethis, sharing, sidebar, sociable, social, social bookmarking, social bookmarks, statistics, stats, stumbleupon, svg, technorati, tumblr, tweet, twitter, vector, widget,wpmu
+Tags: addshoppers, sharing buttons, share button, social buttons, social sharing, ecommerce, social analytics, addthis, sharethis, woocommerce, e-commerce, AddThis, social login, social signin, addtoany, admin, bookmark, bookmarking, bookmarks, button, del.icio.us,Digg, e-mail, email, Facebook, facebook like, google, google plus, google plus one, icon, icons,image, images, Like, linkedin, links, lockerz, messenger, myspace, page, pages, pin, pin it, pinit,pinterest, plugin, plus 1, plus one, Post, posts, Reddit, save, seo, sexybookmarks, Share,Shareaholic, sharedaddy, sharethis, sharing, sidebar, sociable, social, social bookmarking, social bookmarks, statistics, stats, stumbleupon, svg, technorati, tumblr, tweet, twitter, vector, widget,wpmu
 Requires at least: 3.0
 Tested up to: 3.8
 Stable tag: 1.3
@@ -21,6 +21,10 @@ The most popular social networks are included: Facebook, Twitter, Pinterest, Goo
 <h4>Smart Social Apps For Your WordPress Site</h4>
 
 AddShoppers.com powers the apps installed by this plugin. With this plugin and your free [AddShoppers](http://www.addshoppers.com) account, you'll be up and running in less than 5 minutes!
+
+<h4>Social Login</h4>
+
+Our plugin integrates social login into WordPress, making it super easy for your visitors to register and login to your site!
 
 <h4>Increase User Engagement & Traffic</h4>
 
@@ -50,7 +54,6 @@ Do you run an eCommerce store? [AddShoppers](http://www.addshoppers.com) offers 
   <li>ROI Tracking</li>
   <li>Purchase Sharing</li>
   <li>Discovery Wall</li>
-  <li>Social Shopper Login</li>
 </ul>
 
 Visit [http://www.addshoppers.com/apps](http://www.addshoppers.com/apps) to learn more and get started -- they are all compatible with Wordpress!

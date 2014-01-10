@@ -231,12 +231,14 @@ function show_settings_form($options) {
                         	// if no eCommerce plugins detected
                         	if (!$ecom) { ?>
                         		
-								<p class="description">To install Social Login, use the following PHP function in your login/registration page templates: </p>
-								<pre>addshoppers_show_social_login($networks,$size)</pre>
-								<p><b>$networks</b>: Replace with a comma separated list of the networks you want to use for login. Possible values are <b>facebook</b>, <b>google</b>, <b>linkedin</b>, and <b>paypal</b>. </p>
-								<p><b>$size</b>: Replace with the size of the social login buttons that you want. Possible values are <b>small</b>, <b>medium</b>, or <b>large</b>. </p>
-								<p><b>Here's an example to show Facebook and Google+ social login buttons, medium size:</b></p>
-								<pre>&lt;?php addshoppers_show_social_login(&#39;facebook,google&#39;,&#39;medium&#39;); ?&gt;</pre>
+								<p class="description">To install Social Login, use the following shortcode or PHP function in your login/registration page templates: </p>
+								<p style="font-weight: bold;">Shortcode:</p>
+								<pre>[AddShoppersSocialLogin networks="facebook,google,paypal,linkedin" size="medium"]</pre>
+								<p style="font-weight: bold;">PHP function:</p>
+								<pre>addshoppers_show_social_login("facebook,google,paypal,linkedin","medium")</pre>
+								<p>You can remove the networks that you don't want and/or change the size to either "small" or "large".</p>
+								<p style="margin-top: 15px;"><b>Here's an example to show Facebook and Google+ social login buttons, large size:</b></p>
+								<pre>&lt;?php addshoppers_show_social_login(&#39;facebook,google&#39;,&#39;large&#39;); ?&gt;</pre>
                         	<?php } ?>
                         	
                         	<p class="description">Make sure you have your API Secret set above or social login won't work!</p>

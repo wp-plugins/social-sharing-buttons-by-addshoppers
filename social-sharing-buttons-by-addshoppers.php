@@ -41,7 +41,7 @@ function shop_pe_plugin_wp_footer() {
 	
 	<!-- AddShoppers.com Social Analytics --> 
 	<script type="text/javascript">
-	AddShoppersTracking = { lang: { widget: '<?php echo get_locale(); ?>' } }
+	AddShoppersTracking = { lang: { widget: '<?php echo get_addshoppers_lang(); ?>' } }
 	var js = document.createElement('script'); js.type = 'text/javascript'; js.async = true; js.id = 'AddShoppers';
 	js.src = ('https:' == document.location.protocol ? 'https://shop.pe/widget/' : 'http://cdn.shop.pe/widget/') + "widget_async.js#<?php echo( $options['shop_id'] ); ?>"; 
 	document.getElementsByTagName("head")[0].appendChild(js);
@@ -73,6 +73,11 @@ function addshoppers_settings_metalinks($links, $file) {
 }
 add_filter('plugin_row_meta', 'addshoppers_settings_metalinks',10,2);
 
+function get_addshoppers_lang() {
+	$locale = strtolower(get_locale());   
+    $lang = substr( $locale, 0, -2 ) . strtoupper(substr( $locale,-2));
+    return $lang;
+}
 
 require_once( dirname( __FILE__ ) . '/plugin-options.php' );
 require_once( dirname( __FILE__ ) . '/social-login.php' );

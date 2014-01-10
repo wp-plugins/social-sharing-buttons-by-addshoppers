@@ -139,6 +139,7 @@ function show_settings_form($options) {
 ?>
         <form method="post" action="options.php" class="settings">
             <?php settings_fields( 'shop_pe_plugin_options' ); ?>
+            
             <table class="form-table">
                 <tbody>
                     <tr>

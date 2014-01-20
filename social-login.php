@@ -10,7 +10,7 @@ function addshoppers_show_social_login($networks,$size) {
 	
 	if ($size != 'small' && $size != 'medium' && $size != 'large') $size = "medium";
 
-	echo '<div style="text-align: center;">';
+	echo '<div class="addshoppers-social-login-buttons" style="text-align: center;">';
 
 	foreach ($buttons as $button) {
 		echo '<div class="social-commerce-signin-' . $button . '" data-style="logoandtext" data-size="' . $size . '" style="display: inline-block;"></div>';

@@ -127,6 +127,12 @@ function addshoppers_social_login() {
 			'last_name'     => $response['lastname'], 
 			'user_pass'     => wp_generate_password()
 		);
+		
+		// set role to be "customer" for WooCommerce
+		if (woocommerce_is_installed()) {
+			$userdata['role'] = "customer";
+		}
+		
 		$user_id = wp_insert_user( $userdata );
 		
 		if( $user_id && is_integer( $user_id ) ){

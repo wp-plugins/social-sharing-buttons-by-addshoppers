@@ -131,12 +131,21 @@ function addshoppers_social_login() {
 		// set role to be "customer" for WooCommerce
 		if (woocommerce_is_installed()) {
 			$userdata['role'] = "customer";
+			$woo = TRUE;
 		}
 		
 		$user_id = wp_insert_user( $userdata );
 		
 		if( $user_id && is_integer( $user_id ) ){
 			update_user_meta( $user_id, 'Source', 'AddShoppers Social Login' );
+			
+			// set Billing & Shipping First & Last names for WooCommerce
+			if ($woo) {
+				add_user_meta( $user_id, 'billing_first_name', $response['firstname']);
+				add_user_meta( $user_id, 'shipping_first_name', $response['firstname']);
+				add_user_meta( $user_id, 'billing_last_name', $response['lastname']);
+				add_user_meta( $user_id, 'shipping_last_name', $response['lastname']);
+			}
 		}
 		else if (is_wp_error($user_id)) { 
 			echo $user_id->get_error_message();

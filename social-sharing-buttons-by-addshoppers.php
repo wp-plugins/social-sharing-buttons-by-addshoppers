@@ -10,7 +10,7 @@ Plugin Name: Social Sharing Buttons By AddShoppers
 Plugin URI: http://www.addshoppers.com/
 Description: Add smart sharing buttons and advanced social analytics with the AddShoppers plugin for WordPress. More social apps are also available at <a href="http://www.addshoppers.com/">http://www.addshoppers.com/</a>.
 Author: AddShoppers
-Version: 1.4
+Version: 1.4.1
 Author URI: http://www.addshoppers.com/
 */
 
@@ -84,6 +84,7 @@ add_filter('plugin_row_meta', 'addshoppers_settings_metalinks',10,2);
 
 function get_addshoppers_lang() {
 	$locale = strtolower(get_locale());   
+	if ($locale == "es_es") $locale = "es_mx";
     $lang = substr( $locale, 0, -2 ) . strtoupper(substr( $locale,-2));
     return $lang;
 }

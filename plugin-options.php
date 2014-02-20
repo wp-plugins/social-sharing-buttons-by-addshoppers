@@ -354,12 +354,15 @@ function shop_pe_plugin_admin_validate( $input ) {
     // social login buttons to show
 	$login_networks = addshoppers_networks('login');
     $options['login_networks'] = array();
-    foreach ($input['login_networks'] as $network) {
-    	if (array_key_exists($network,$login_networks)) {
-    		$options['login_networks'][] = $network;
+    
+    if (is_array($input['login_networks'])) {
+		foreach ($input['login_networks'] as $network) {
+    		if (array_key_exists($network,$login_networks)) {
+    			$options['login_networks'][] = $network;
+    		}
     	}
     }
-    
+
     // social login integrations
     $options['show_woocommerce_social_login'] = $input['show_woocommerce_social_login'];
     //$options['show_woocommerce_social_login_login'] = $input['show_woocommerce_social_login_login'];

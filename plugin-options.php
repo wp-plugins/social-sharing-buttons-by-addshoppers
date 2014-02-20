@@ -42,13 +42,22 @@ function shop_pe_plugin_admin_add_page() {
 endif;
 add_action( 'admin_menu', 'shop_pe_plugin_admin_add_page' );
 
+/*
+ * Add submenu to main WooCommerce menu
+ *
+ */
+add_action( 'admin_menu', 'addshoppers_woocommerce_submenu' );
+function addshoppers_woocommerce_submenu() {
+    add_submenu_page( 'woocommerce', 'AddShoppers', 'AddShoppers', 'edit_theme_options', 'shop-pe-plugin', 'shop_pe_plugin_admin_do_page' ); 
+}
+
 /**
- * Include admin CSS only the plugin settings page.
+ * Include admin CSS (only on the plugin settings page).
  *
  * @since WPShopPe 1.0
  */
 function addshoppers_admin_css($hook) {
-    if( 'settings_page_shop-pe-plugin' != $hook )
+    if( 'settings_page_shop-pe-plugin' != $hook && 'woocommerce_page_shop-pe-plugin' != $hook)
         return;
     wp_enqueue_style( 'addshoppers_admin_css', AS_PLUGIN_FOLDER . 'addshoppers-admin.css' );
 }
@@ -178,7 +187,7 @@ function show_settings_form($options) {
                         <th scope="row">Show Share for Coupon Button on Cart Page</th>
                         <td>
                             <input id="show-coupon-button-woocommerce-cart" type="checkbox" name="shop_pe_options[show_coupon_button_woocommerce_cart]" value="1" <?php if ($options['show_coupon_button_woocommerce_cart'] == 1 ) echo 'checked="checked" '; ?>/>
-                            <p class="description">Check this box to show a Share for Coupon button right below your Enter Coupon Code box (great for increasing conversions!). Make sure you set up a Social Reward first!</p>
+                            <p class="description">Check this box to show a Share for Coupon button right below your Enter Coupon Code box (great for increasing conversions!). Make sure you set up a Social Reward (<a href="http://help.addshoppers.com/customer/portal/articles/688052-how-to-add-a-social-reward-to-addshoppers-" target="_blank">instructions</a>) first!</p>
                         </td>
                     </tr>
     <?php } ?>
@@ -345,12 +354,15 @@ function shop_pe_plugin_admin_validate( $input ) {
     // social login buttons to show
 	$login_networks = addshoppers_networks('login');
     $options['login_networks'] = array();
-    foreach ($input['login_networks'] as $network) {
-    	if (array_key_exists($network,$login_networks)) {
-    		$options['login_networks'][] = $network;
+    
+    if (is_array($input['login_networks'])) {
+		foreach ($input['login_networks'] as $network) {
+    		if (array_key_exists($network,$login_networks)) {
+    			$options['login_networks'][] = $network;
+    		}
     	}
     }
-    
+
     // social login integrations
     $options['show_woocommerce_social_login'] = $input['show_woocommerce_social_login'];
     //$options['show_woocommerce_social_login_login'] = $input['show_woocommerce_social_login_login'];

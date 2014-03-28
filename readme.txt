@@ -4,7 +4,7 @@ Donate link:
 Tags: addshoppers, sharing buttons, share button, social buttons, social sharing, ecommerce, social analytics, addthis, sharethis, woocommerce, e-commerce, AddThis, social login, social signin, addtoany, admin, bookmark, bookmarking, bookmarks, button, del.icio.us,Digg, e-mail, email, Facebook, facebook like, google, google plus, google plus one, icon, icons,image, images, Like, linkedin, links, lockerz, messenger, myspace, page, pages, pin, pin it, pinit,pinterest, plugin, plus 1, plus one, Post, posts, Reddit, save, seo, sexybookmarks, Share,Shareaholic, sharedaddy, sharethis, sharing, sidebar, sociable, social, social bookmarking, social bookmarks, statistics, stats, stumbleupon, svg, technorati, tumblr, tweet, twitter, vector, widget,wpmu
 Requires at least: 3.0
 Tested up to: 3.8
-Stable tag: 1.4.2
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

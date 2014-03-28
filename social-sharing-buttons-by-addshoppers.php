@@ -3,14 +3,14 @@
  * AddShoppers Plugin
  *
  * @package WPShopPe
- * @version 1.4.2
+ * @version 1.5
  */
 /*
 Plugin Name: Social Sharing Buttons By AddShoppers
 Plugin URI: http://www.addshoppers.com/
 Description: Add smart sharing buttons and advanced social analytics with the AddShoppers plugin for WordPress. More social apps are also available at <a href="http://www.addshoppers.com/">http://www.addshoppers.com/</a>.
 Author: AddShoppers
-Version: 1.4.2
+Version: 1.5
 Author URI: http://www.addshoppers.com/
 */
 

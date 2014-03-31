@@ -560,7 +560,7 @@ function addshoppers_purchase_sharing_woocommerce( $order_id ) {
 	$order = new WC_Order( $order_id );
 	$options = get_option( 'shop_pe_options' );
 		
-	if ( sizeof( $order->get_items() ) == 2 ) {
+	if ( sizeof( $order->get_items() ) == 1 ) {
 		foreach ( $order->get_items() as $cart_item_key => $cart_item ) {
 			$_pf = new WC_Product_Factory(); 
 			$_product = $_pf->get_product($cart_item['product_id']);
@@ -573,6 +573,6 @@ function addshoppers_purchase_sharing_woocommerce( $order_id ) {
 		}
 	}
 	else {
-		show_addshoppers_purchase_sharing($options['purchase_sharing_header'],$options['purchase_sharing_image'],$options['purchase_sharing_url'],$options['purchase_sharing_name'],$options['purchase_sharing_description']);
+		show_addshoppers_purchase_sharing($options['purchase_sharing_header'],$options['purchase_sharing_image'],$options['purchase_sharing_url'],$options['purchase_sharing_name'],'',$options['purchase_sharing_description']);
 	}
 }

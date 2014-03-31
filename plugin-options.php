@@ -42,13 +42,22 @@ function shop_pe_plugin_admin_add_page() {
 endif;
 add_action( 'admin_menu', 'shop_pe_plugin_admin_add_page' );
 
+/*
+ * Add submenu to main WooCommerce menu
+ *
+ */
+add_action( 'admin_menu', 'addshoppers_woocommerce_submenu' );
+function addshoppers_woocommerce_submenu() {
+    add_submenu_page( 'woocommerce', 'AddShoppers', 'AddShoppers', 'edit_theme_options', 'shop-pe-plugin', 'shop_pe_plugin_admin_do_page' ); 
+}
+
 /**
- * Include admin CSS only the plugin settings page.
+ * Include admin CSS (only on the plugin settings page).
  *
  * @since WPShopPe 1.0
  */
 function addshoppers_admin_css($hook) {
-    if( 'settings_page_shop-pe-plugin' != $hook )
+    if( 'settings_page_shop-pe-plugin' != $hook && 'woocommerce_page_shop-pe-plugin' != $hook)
         return;
     wp_enqueue_style( 'addshoppers_admin_css', AS_PLUGIN_FOLDER . 'addshoppers-admin.css' );
 }
@@ -63,7 +72,6 @@ function addshoppers_responsive_css($hook) {
     wp_enqueue_style( 'addshoppers_responsive_css', AS_PLUGIN_FOLDER . 'addshoppers-responsive.css' );
 }
 add_action( 'wp_enqueue_scripts', 'addshoppers_responsive_css' );
-
 
 if ( ! function_exists( 'shop_pe_plugin_admin_do_page' ) ):
 /**
@@ -146,14 +154,14 @@ function show_settings_form($options) {
                         <th scope="row">Shop ID</th>
                         <td>
                             <input id="shop-id" class="regular-text" type="text" name="shop_pe_options[shop_id]" value="<?php echo( $options['shop_id'] ); ?>" placeholder="Your ID" />
-                            <p class="description">(Optional) Enter your shop ID if you want to track the analytics of your sharing buttons. <br/>You can get your shop ID or sign up for one <a href="https://www.addshoppers.com/merchants" target="_blank">here</a>. Go to your profile (top right), then Settings &rarr; Shops and copy the Shop ID for your shop into the field above.</p>
+                            <p class="description">(Optional) Enter your shop ID if you want to track the analytics of your sharing buttons. <br/>You can get your shop ID or sign up for one <a href="https://www.addshoppers.com/merchants" target="_blank">here</a>. Go to your profile (top right), choose Shop Settings and copy the Shop ID for your shop into the field above.</p>
                         </td>
                      </tr>
                      <tr>
                         <th scope="row">API Secret</th>
                         <td>
                             <input id="api-secret" class="regular-text" type="text" name="shop_pe_options[api_secret]" value="<?php echo( $options['api_secret'] ); ?>" placeholder="Your API Secret" />
-                            <p class="description">(Only necessary for AddShoppers Social Login) <br/>You can get your API Secret from your <a href="https://www.addshoppers.com/merchants" target="_blank">AddShoppers dashboard</a>. Go to your profile (top right), then Settings &rarr; API and copy the API Secret (not API Key) for your shop into the field above</p>
+                            <p class="description">(Only necessary for AddShoppers Social Login) <br/>You can get your API Secret from your <a href="https://www.addshoppers.com/merchants" target="_blank">AddShoppers dashboard</a>. Go to your profile (top right), choose Account Settings, then select the API tab and copy the API Secret (not API Key) for your shop into the field above</p>
                         </td>
                      </tr>
                       <tr>
@@ -178,7 +186,7 @@ function show_settings_form($options) {
                         <th scope="row">Show Share for Coupon Button on Cart Page</th>
                         <td>
                             <input id="show-coupon-button-woocommerce-cart" type="checkbox" name="shop_pe_options[show_coupon_button_woocommerce_cart]" value="1" <?php if ($options['show_coupon_button_woocommerce_cart'] == 1 ) echo 'checked="checked" '; ?>/>
-                            <p class="description">Check this box to show a Share for Coupon button right below your Enter Coupon Code box (great for increasing conversions!). Make sure you set up a Social Reward first!</p>
+                            <p class="description">Check this box to show a Share for Coupon button right below your Enter Coupon Code box (great for increasing conversions!). Make sure you set up a Social Reward (<a href="http://help.addshoppers.com/customer/portal/articles/688052-how-to-add-a-social-reward-to-addshoppers-" target="_blank">instructions</a>) first!</p>
                         </td>
                     </tr>
     <?php } ?>
@@ -245,6 +253,39 @@ function show_settings_form($options) {
                         	<p class="description">Make sure you have your API Secret set above or social login won't work!</p>
                         </td>
                     </tr>
+	<?php 
+     // if WooCommerce is detected
+     if (woocommerce_is_installed()) { 
+     ?>
+                    <tr>
+                        <th scope="row">Purchase Sharing</th>
+                        <td>
+                        	<p style="margin-bottom: 10px;"><input id="default-buttons" type="checkbox" name="shop_pe_options[purchase_sharing]" value="1" <?php if ($options['purchase_sharing'] == 1 ) echo 'checked="checked" '; ?>/> Check this box to enable Purchase Sharing.</p>
+                        		
+                        		<h3>Default Purchase Sharing Information</h3>
+                        		
+                        		<p>If there is <b>one product in the order</b>, the details of the product will be shared on the Thank You page. If there are <b>more than one products</b> in the order, this information will be shared instead:</p>
+                        		
+                        		<input style="margin-top: 10px;" id="purchase-sharing-header" class="regular-text" type="text" name="shop_pe_options[purchase_sharing_header]" value="<?php echo( $options['purchase_sharing_header'] ); ?>" placeholder="Sharing Modal Header" />
+                            	<p class="description">Enter the header for your Purchase Sharing header. For example, "Brag about your purchase to your friends!"</p>          
+                            	
+                            	<input style="margin-top: 10px;" id="purchase-sharing-image" class="regular-text" type="text" name="shop_pe_options[purchase_sharing_image]" value="<?php echo( $options['purchase_sharing_image'] ); ?>" placeholder="Share Image URL" />
+                            	<p class="description">Enter the URL to the image that you want shared. Generally, this will be your logo.</p>          
+                            	
+                            	<input style="margin-top: 10px;" id="purchase-sharing-url" class="regular-text" type="text" name="shop_pe_options[purchase_sharing_url]" value="<?php echo( $options['purchase_sharing_url'] ); ?>" placeholder="Share URL" />
+                            	<p class="description">Enter the URL that you want shares to link to. Generally, this will be your homepage. </p>          
+                            	
+                            	<input style="margin-top: 10px;" id="purchase-sharing-name" class="regular-text" type="text" name="shop_pe_options[purchase_sharing_name]" value="<?php echo( $options['purchase_sharing_name'] ); ?>" placeholder="Share Title" />
+                            	<p class="description">Enter the title for the share. Generally, this will be your store title.</p>          
+                            	
+                            	<input style="margin-top: 10px;" id="purchase-sharing-description" class="regular-text" type="text" name="shop_pe_options[purchase_sharing_description]" value="<?php echo( $options['purchase_sharing_description'] ); ?>" placeholder="Share Description" />
+                            	<p class="description">Enter the description for your share. Generally, this will be a description of your store.</p>                  		
+                        	
+                        </td>
+                    </tr>
+			<?php
+				}                   	
+			?>
                 </tbody>
             </table>
 
@@ -345,12 +386,15 @@ function shop_pe_plugin_admin_validate( $input ) {
     // social login buttons to show
 	$login_networks = addshoppers_networks('login');
     $options['login_networks'] = array();
-    foreach ($input['login_networks'] as $network) {
-    	if (array_key_exists($network,$login_networks)) {
-    		$options['login_networks'][] = $network;
+    
+    if (is_array($input['login_networks'])) {
+		foreach ($input['login_networks'] as $network) {
+    		if (array_key_exists($network,$login_networks)) {
+    			$options['login_networks'][] = $network;
+    		}
     	}
     }
-    
+
     // social login integrations
     $options['show_woocommerce_social_login'] = $input['show_woocommerce_social_login'];
     //$options['show_woocommerce_social_login_login'] = $input['show_woocommerce_social_login_login'];
@@ -359,6 +403,15 @@ function shop_pe_plugin_admin_validate( $input ) {
     // roi integrations
     $options['disable_woocommerce_roi'] = $input['disable_woocommerce_roi'];
     $options['disable_eshop_roi'] = $input['disable_eshop_roi'];
+    
+    // Purchase Sharing settings
+    if (!$input['purchase_sharing']) $input['purchase_sharing'] = 0;
+    $options['purchase_sharing'] = $input['purchase_sharing'];
+    $options['purchase_sharing_header'] = $input['purchase_sharing_header'];
+    $options['purchase_sharing_image'] = $input['purchase_sharing_image'];
+    $options['purchase_sharing_url'] = $input['purchase_sharing_url'];
+    $options['purchase_sharing_name'] = $input['purchase_sharing_name'];
+    $options['purchase_sharing_description'] = $input['purchase_sharing_description'];
     
     add_settings_error(
         'shop_pe_options',
@@ -373,7 +426,7 @@ endif;
 
 // check if WooCommerce is installed
 function woocommerce_is_installed() {
-	if ( has_action( 'woocommerce_thankyou' ) ) return true;
+	if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) return true;
 	else return false;
 }
 
@@ -428,7 +481,7 @@ endif;
 
 
 // install ROI tracking in WooCommerce if installed
-if ( has_action( 'woocommerce_thankyou' ) ):
+if (woocommerce_is_installed()):
 	$options = get_option( 'shop_pe_options' );
 	if ($options['disable_woocommerce_roi'] != 1 && !empty($options['shop_id'])):
 		add_action( 'woocommerce_thankyou', 'addshoppers_roi_tracking' );
@@ -437,6 +490,14 @@ if ( has_action( 'woocommerce_thankyou' ) ):
    			$options = get_option( 'shop_pe_options' );
    			show_roi_tracking($options['shop_id'], $order_id, $order->get_order_total());
 		}
+	endif;
+endif;
+
+// install Purchase Sharing in WooCommerce if installed
+if (woocommerce_is_installed()):
+	$options = get_option( 'shop_pe_options' );
+	if ( $options['purchase_sharing'] != 0 ):
+		add_action( 'woocommerce_thankyou', 'addshoppers_purchase_sharing_woocommerce' );
 	endif;
 endif;
 
@@ -469,12 +530,49 @@ function show_roi_tracking($shop_id, $order_id, $order_total) {
 	?>
 		<script type="text/javascript">
 			AddShoppersConversion = {
-    	    	order_id: <?php echo $order_id; ?>,
-    	    	value: <?php echo $order_total; ?>
+    	    	order_id: '<?php echo $order_id; ?>',
+    	    	value: '<?php echo $order_total; ?>'
    			};
 			var js = document.createElement('script'); js.type = 'text/javascript'; js.async = true; js.id = 'AddShoppers';
 			js.src = ('https:' == document.location.protocol ? 'https://shop.pe/widget/' : 'http://cdn.shop.pe/widget/') + 'widget_async.js#<?php echo $shop_id; ?>';
 			document.getElementsByTagName("head")[0].appendChild(js);
 		</script>	
 	<?php
+}
+
+function show_addshoppers_purchase_sharing($header, $image, $link, $title, $price = '', $content) {
+	?>
+	<script type="text/javascript">
+	AddShoppersTracking = {
+		auto: true,
+		header: "<?php echo $header; ?>",
+		image: "<?php echo $image; ?>",
+		url: "<?php echo $link; ?>",
+		name: "<?php echo $title; ?>",
+		description: "<?php echo $content; ?>",
+		price: "<?php echo $price; ?>"
+	}
+	</script>
+	<?php
+}
+
+function addshoppers_purchase_sharing_woocommerce( $order_id ) {
+	$order = new WC_Order( $order_id );
+	$options = get_option( 'shop_pe_options' );
+		
+	if ( sizeof( $order->get_items() ) == 1 ) {
+		foreach ( $order->get_items() as $cart_item_key => $cart_item ) {
+			$_pf = new WC_Product_Factory(); 
+			$_product = $_pf->get_product($cart_item['product_id']);
+			$price = "$" . $_product->get_price();	
+			$content = $_product->post->post_content;
+			$title = $_product->post->post_title;
+			$link = get_permalink( $cart_item['product_id'] );
+			$image = wp_get_attachment_url( get_post_thumbnail_id( $cart_item['product_id'] ) );	
+			show_addshoppers_purchase_sharing($options['purchase_sharing_header'], $image, $link, $title, $price, $content); 
+		}
+	}
+	else {
+		show_addshoppers_purchase_sharing($options['purchase_sharing_header'],$options['purchase_sharing_image'],$options['purchase_sharing_url'],$options['purchase_sharing_name'],'',$options['purchase_sharing_description']);
+	}
 }

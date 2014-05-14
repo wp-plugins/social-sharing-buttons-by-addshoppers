@@ -576,3 +576,28 @@ function addshoppers_purchase_sharing_woocommerce( $order_id ) {
 		show_addshoppers_purchase_sharing($options['purchase_sharing_header'],$options['purchase_sharing_image'],$options['purchase_sharing_url'],$options['purchase_sharing_name'],'',$options['purchase_sharing_description']);
 	}
 }
+
+add_action( 'woocommerce_cart_contents', 'addshoppers_cart_page_info' );
+function addshoppers_cart_page_info() {
+	global $woocommerce;	
+	foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $cart_item ) {
+	$_pf = new WC_Product_Factory(); 
+	$_product = $_pf->get_product($cart_item['product_id']);
+	$price = "$" . $_product->get_price();	
+	$content = $_product->post->post_content;
+	$title = $_product->post->post_title;
+	$link = get_permalink( $cart_item['product_id'] );
+	$image = wp_get_attachment_url( get_post_thumbnail_id( $cart_item['product_id'] ) );	
+	?>
+		<script type="text/javascript">
+		AddShoppersTracking = {
+		image: "<?php echo $image; ?>",
+		url: "<?php echo $link; ?>",
+		name: "<?php echo $title; ?>",
+		description: "<?php echo $content; ?>",
+		price: "<?php echo $price; ?>"
+		}
+		</script>
+	<?php
+	}
+}

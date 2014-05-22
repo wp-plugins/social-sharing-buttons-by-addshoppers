@@ -10,7 +10,7 @@ function addshoppers_show_social_login($networks,$size) {
 	
 	if ($size != 'small' && $size != 'medium' && $size != 'large') $size = "medium";
 
-	echo '<div style="text-align: center;">';
+	echo '<div class="addshoppers-social-login-buttons" style="text-align: center;">';
 
 	foreach ($buttons as $button) {
 		echo '<div class="social-commerce-signin-' . $button . '" data-style="logoandtext" data-size="' . $size . '" style="display: inline-block;"></div>';
@@ -127,10 +127,25 @@ function addshoppers_social_login() {
 			'last_name'     => $response['lastname'], 
 			'user_pass'     => wp_generate_password()
 		);
+		
+		// set role to be "customer" for WooCommerce
+		if (woocommerce_is_installed()) {
+			$userdata['role'] = "customer";
+			$woo = TRUE;
+		}
+		
 		$user_id = wp_insert_user( $userdata );
 		
 		if( $user_id && is_integer( $user_id ) ){
 			update_user_meta( $user_id, 'Source', 'AddShoppers Social Login' );
+			
+			// set Billing & Shipping First & Last names for WooCommerce
+			if ($woo) {
+				add_user_meta( $user_id, 'billing_first_name', $response['firstname']);
+				add_user_meta( $user_id, 'shipping_first_name', $response['firstname']);
+				add_user_meta( $user_id, 'billing_last_name', $response['lastname']);
+				add_user_meta( $user_id, 'shipping_last_name', $response['lastname']);
+			}
 		}
 		else if (is_wp_error($user_id)) { 
 			echo $user_id->get_error_message();

@@ -580,24 +580,19 @@ function addshoppers_purchase_sharing_woocommerce( $order_id ) {
 add_action( 'woocommerce_cart_contents', 'addshoppers_cart_page_info' );
 function addshoppers_cart_page_info() {
 	global $woocommerce;	
+	$product_data = array();
 	foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $cart_item ) {
-	$_pf = new WC_Product_Factory(); 
-	$_product = $_pf->get_product($cart_item['product_id']);
-	$price = "$" . $_product->get_price();	
-	$content = $_product->post->post_content;
-	$title = $_product->post->post_title;
-	$link = get_permalink( $cart_item['product_id'] );
-	$image = wp_get_attachment_url( get_post_thumbnail_id( $cart_item['product_id'] ) );	
-	?>
+		$_pf = new WC_Product_Factory(); 
+		$_product = $_pf->get_product($cart_item['product_id']);
+		$product_data['price'] = "$" . $_product->get_price();	
+		$product_data['description'] = $_product->post->post_content;
+		$product_data['title'] = $_product->post->post_title;
+		$product_data['url'] = get_permalink( $cart_item['product_id'] );
+		$product_data['image'] = wp_get_attachment_url( get_post_thumbnail_id( $cart_item['product_id'] ) );	
+		?>
 		<script type="text/javascript">
-		AddShoppersTracking = {
-		image: "<?php echo $image; ?>",
-		url: "<?php echo $link; ?>",
-		name: "<?php echo $title; ?>",
-		description: "<?php echo $content; ?>",
-		price: "<?php echo $price; ?>"
-		}
+		AddShoppersTracking = <?php echo json_encode($product_data); ?>;
 		</script>
-	<?php
+		<?php
 	}
 }

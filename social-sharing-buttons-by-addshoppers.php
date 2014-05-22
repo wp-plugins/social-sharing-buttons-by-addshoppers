@@ -3,14 +3,14 @@
  * AddShoppers Plugin
  *
  * @package WPShopPe
- * @version 1.3
+ * @version 1.5.2
  */
 /*
 Plugin Name: Social Sharing Buttons By AddShoppers
 Plugin URI: http://www.addshoppers.com/
 Description: Add smart sharing buttons and advanced social analytics with the AddShoppers plugin for WordPress. More social apps are also available at <a href="http://www.addshoppers.com/">http://www.addshoppers.com/</a>.
 Author: AddShoppers
-Version: 1.3
+Version: 1.5.7
 Author URI: http://www.addshoppers.com/
 */
 
@@ -41,7 +41,16 @@ function shop_pe_plugin_wp_footer() {
 	
 	<!-- AddShoppers.com Social Analytics --> 
 	<script type="text/javascript">
-	AddShoppersTracking = { lang: { widget: '<?php echo get_addshoppers_lang(); ?>' } }
+	if(typeof AddShoppersTracking === 'undefined'){
+    	AddShoppersTracking = {
+            lang: { 
+            	widget: '<?php echo get_addshoppers_lang(); ?>'
+        	}
+        };
+	}
+	else {
+		AddShoppersTracking.lang = { widget: '<?php echo get_addshoppers_lang(); ?>' } };
+	
 	var js = document.createElement('script'); js.type = 'text/javascript'; js.async = true; js.id = 'AddShoppers';
 	js.src = ('https:' == document.location.protocol ? 'https://shop.pe/widget/' : 'http://cdn.shop.pe/widget/') + "widget_async.js#<?php echo( $options['shop_id'] ); ?>"; 
 	document.getElementsByTagName("head")[0].appendChild(js);
@@ -75,6 +84,7 @@ add_filter('plugin_row_meta', 'addshoppers_settings_metalinks',10,2);
 
 function get_addshoppers_lang() {
 	$locale = strtolower(get_locale());   
+	if ($locale == "es_es") $locale = "es_mx";
     $lang = substr( $locale, 0, -2 ) . strtoupper(substr( $locale,-2));
     return $lang;
 }

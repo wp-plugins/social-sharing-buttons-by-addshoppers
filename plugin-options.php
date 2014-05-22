@@ -564,7 +564,7 @@ function addshoppers_purchase_sharing_woocommerce( $order_id ) {
 		foreach ( $order->get_items() as $cart_item_key => $cart_item ) {
 			$_pf = new WC_Product_Factory(); 
 			$_product = $_pf->get_product($cart_item['product_id']);
-			$price = "$" . $_product->get_price();	
+			$price = get_woocommerce_currency_symbol() . $_product->get_price();	
 			$content = $_product->post->post_content;
 			$title = $_product->post->post_title;
 			$link = get_permalink( $cart_item['product_id'] );
@@ -584,7 +584,7 @@ function addshoppers_cart_page_info() {
 	foreach ( $woocommerce->cart->get_cart() as $cart_item_key => $cart_item ) {
 		$_pf = new WC_Product_Factory(); 
 		$_product = $_pf->get_product($cart_item['product_id']);
-		$product_data['price'] = "$" . $_product->get_price();	
+		$product_data['price'] = get_woocommerce_currency_symbol() . $_product->get_price();	
 		$product_data['description'] = $_product->post->post_content;
 		$product_data['title'] = $_product->post->post_title;
 		$product_data['url'] = get_permalink( $cart_item['product_id'] );

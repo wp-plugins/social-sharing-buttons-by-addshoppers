@@ -68,10 +68,16 @@ add_action( 'admin_enqueue_scripts', 'addshoppers_admin_css' );
  *
  * @since WPShopPe 1.2
  */
+ 
+ /*
+ Removing responsive CSS because it's already included in the widget now - version 1.5.8
+ 
 function addshoppers_responsive_css($hook) {
     wp_enqueue_style( 'addshoppers_responsive_css', AS_PLUGIN_FOLDER . 'addshoppers-responsive.css' );
 }
 add_action( 'wp_enqueue_scripts', 'addshoppers_responsive_css' );
+
+*/
 
 if ( ! function_exists( 'shop_pe_plugin_admin_do_page' ) ):
 /**

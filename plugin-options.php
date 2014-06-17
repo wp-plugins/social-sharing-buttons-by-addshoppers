@@ -135,7 +135,7 @@ function show_as_dashboard($shop_id) {
 		<h3>You haven't set up your account so we can't track stats for you :(</h3>
 		<p>To see your dashboard and social analytics here instead of this message, please <a href="https://www.addshoppers.com/merchants" target="_blank">click here</a> to create your account. Once you've created your account, go to Settings > Shops and copy the Shop ID for your site into the Settings tab above.</p>
 	<?php } else { ?>
-	<iframe id="dashboard_iframe" src="https://www.addshoppers.com/merchants" style="border: 0px; margin-top: 10px;<?php if (empty($shop_id)) echo 'display: none;'; ?>" height="600px" width="100%;" />
+	<iframe id="dashboard_iframe" src="https://addshoppers.com/merchants/" style="border: 0px; margin-top: 10px;<?php if (empty($shop_id)) echo 'display: none;'; ?>" height="600px" width="100%;" />
 	<?php
 	}
 }

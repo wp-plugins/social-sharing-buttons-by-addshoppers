@@ -546,18 +546,11 @@ function show_roi_tracking($shop_id, $order_id, $order_total) {
 	<?php
 }
 
-function show_addshoppers_purchase_sharing($header, $image, $link, $title, $price = '', $content) {
+function show_addshopperstracking($auto, $sharing_data) {
+	$sharing_data['auto'] = $auto;
 	?>
 	<script type="text/javascript">
-	AddShoppersTracking = {
-		auto: true,
-		header: "<?php echo $header; ?>",
-		image: "<?php echo $image; ?>",
-		url: "<?php echo $link; ?>",
-		name: "<?php echo $title; ?>",
-		description: "<?php echo $content; ?>",
-		price: "<?php echo $price; ?>"
-	}
+	AddShoppersTracking = <?php echo json_encode($sharing_data); ?>;
 	</script>
 	<?php
 }
@@ -565,25 +558,33 @@ function show_addshoppers_purchase_sharing($header, $image, $link, $title, $pric
 function addshoppers_purchase_sharing_woocommerce( $order_id ) {
 	$order = new WC_Order( $order_id );
 	$options = get_option( 'shop_pe_options' );
+	
+	$product_data = array('header' => $options['purchase_sharing_header']);
 		
 	if ( sizeof( $order->get_items() ) == 1 ) {
 		foreach ( $order->get_items() as $cart_item_key => $cart_item ) {
 			$_pf = new WC_Product_Factory(); 
 			$_product = $_pf->get_product($cart_item['product_id']);
-			$price = get_woocommerce_currency_symbol() . $_product->get_price();	
-			$content = $_product->post->post_content;
-			$title = $_product->post->post_title;
-			$link = get_permalink( $cart_item['product_id'] );
-			$image = wp_get_attachment_url( get_post_thumbnail_id( $cart_item['product_id'] ) );	
-			show_addshoppers_purchase_sharing($options['purchase_sharing_header'], $image, $link, $title, $price, $content); 
+			$product_data['price'] = get_woocommerce_currency_symbol() . $_product->get_price();	
+			$product_data['description'] = $_product->post->post_content;
+			$product_data['name']= $_product->post->post_title;
+			$product_data['url'] = get_permalink( $cart_item['product_id'] );
+			$product_data['image'] = wp_get_attachment_url( get_post_thumbnail_id( $cart_item['product_id'] ) );	
 		}
 	}
 	else {
-		show_addshoppers_purchase_sharing($options['purchase_sharing_header'],$options['purchase_sharing_image'],$options['purchase_sharing_url'],$options['purchase_sharing_name'],'',$options['purchase_sharing_description']);
+			$product_data['description'] = $options['purchase_sharing_description'];
+			$product_data['name']= $options['purchase_sharing_name'];
+			$product_data['url'] = $options['purchase_sharing_url'];
+			$product_data['image'] = $options['purchase_sharing_image'];	
 	}
+	show_addshopperstracking(true,$product_data); 
 }
 
-add_action( 'woocommerce_cart_contents', 'addshoppers_cart_page_info' );
+if (woocommerce_is_installed()):
+	add_action( 'woocommerce_cart_contents', 'addshoppers_cart_page_info' );
+endif;
+
 function addshoppers_cart_page_info() {
 	global $woocommerce;	
 	$product_data = array();
@@ -592,13 +593,9 @@ function addshoppers_cart_page_info() {
 		$_product = $_pf->get_product($cart_item['product_id']);
 		$product_data['price'] = get_woocommerce_currency_symbol() . $_product->get_price();	
 		$product_data['description'] = $_product->post->post_content;
-		$product_data['title'] = $_product->post->post_title;
+		$product_data['name'] = $_product->post->post_title;
 		$product_data['url'] = get_permalink( $cart_item['product_id'] );
 		$product_data['image'] = wp_get_attachment_url( get_post_thumbnail_id( $cart_item['product_id'] ) );	
-		?>
-		<script type="text/javascript">
-		AddShoppersTracking = <?php echo json_encode($product_data); ?>;
-		</script>
-		<?php
+		show_addshopperstracking(false,$product_data); 
 	}
 }

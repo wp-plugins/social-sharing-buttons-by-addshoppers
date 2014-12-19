@@ -3,7 +3,7 @@
  * AddShoppers Plugin
  *
  * @package WPShopPe
- * @version 1.6
+ * @version 1.6.1
  */
 /*
 Plugin Name: Social Sharing Buttons By AddShoppers

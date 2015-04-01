@@ -494,7 +494,7 @@ if (woocommerce_is_installed()):
 		function addshoppers_roi_tracking( $order_id ) {
    			$order = new WC_Order( $order_id );
    			$options = get_option( 'shop_pe_options' );
-   			show_roi_tracking($options['shop_id'], $order_id, $order->get_order_total());
+   			show_roi_tracking($options['shop_id'], $order_id, $order->get_total());
 		}
 	endif;
 endif;

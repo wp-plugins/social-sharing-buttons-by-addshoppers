@@ -139,7 +139,7 @@ function show_as_dashboard($shop_id) {
 	if (empty($shop_id)) { 
 ?>
 		<h3>You haven't set up your account so we can't track stats for you :(</h3>
-		<p>To see your dashboard and social analytics here instead of this message, please <a href="https://www.addshoppers.com/merchants" target="_blank">click here</a> to create your account. Once you've created your account, go to Settings > Shops and copy the Shop ID for your site into the Settings tab above.</p>
+		<p>To see your dashboard and social analytics here instead of this message, please <a href="https://app.addshoppers.com/merchants" target="_blank">click here</a> to create your account. Once you've created your account, go to Settings > Shops and copy the Shop ID for your site into the Settings tab above.</p>
 	<?php } else { ?>
 	<iframe id="dashboard_iframe" src="https://app.addshoppers.com/login/" style="border: 0px; margin-top: 10px;<?php if (empty($shop_id)) echo 'display: none;'; ?>" height="600px" width="100%;" />
 	<?php
@@ -160,21 +160,21 @@ function show_settings_form($options) {
                         <th scope="row">Shop ID</th>
                         <td>
                             <input id="shop-id" class="regular-text" type="text" name="shop_pe_options[shop_id]" value="<?php echo( $options['shop_id'] ); ?>" placeholder="Your ID" />
-                            <p class="description">(Optional) Enter your shop ID if you want to track the analytics of your sharing buttons. <br/>You can get your shop ID or sign up for one <a href="https://www.addshoppers.com/merchants" target="_blank">here</a>. Go to your profile (top right), choose Shop Settings and copy the Shop ID for your shop into the field above.</p>
+                            <p class="description">(Optional) Enter your shop ID if you want to track the analytics of your sharing buttons. <br/>You can get your shop ID or sign up for one <a href="https://app.addshoppers.com/merchants" target="_blank">here</a>. Go to your profile (top right), choose Shop Settings and copy the Shop ID for your shop into the field above.</p>
                         </td>
                      </tr>
                      <tr>
                         <th scope="row">API Secret</th>
                         <td>
                             <input id="api-secret" class="regular-text" type="text" name="shop_pe_options[api_secret]" value="<?php echo( $options['api_secret'] ); ?>" placeholder="Your API Secret" />
-                            <p class="description">(Only necessary for AddShoppers Social Login) <br/>You can get your API Secret from your <a href="https://www.addshoppers.com/merchants" target="_blank">AddShoppers dashboard</a>. Go to your profile (top right), choose Account Settings, then select the API tab and copy the API Secret (not API Key) for your shop into the field above</p>
+                            <p class="description">(Only necessary for AddShoppers Social Login) <br/>You can get your API Secret from your <a href="https://app.addshoppers.com/merchants" target="_blank">AddShoppers dashboard</a>. Go to your profile (top right), choose Account Settings, then select the API tab and copy the API Secret (not API Key) for your shop into the field above</p>
                         </td>
                      </tr>
                       <tr>
                         <th scope="row">Show Floating Buttons</th>
                         <td>
                             <input id="default-buttons" type="checkbox" name="shop_pe_options[default_buttons]" value="1" <?php if ($options['default_buttons'] == 1 ) echo 'checked="checked" '; ?>/>
-                            <p class="description">Check this box to show the default floating buttons. If you want different buttons, grab the code for the buttons you want in your <a href="https://www.addshoppers.com/merchants" target="_blank">AddShoppers Dashboard</a> under Apps &rarr; Sharing Buttons. Copy and paste the code for your buttons into the desired location in your active theme.</p>
+                            <p class="description">Check this box to show the default floating buttons. If you want different buttons, grab the code for the buttons you want in your <a href="https://app.addshoppers.com/merchants" target="_blank">AddShoppers Dashboard</a> under Apps &rarr; Sharing Buttons. Copy and paste the code for your buttons into the desired location in your active theme.</p>
                         </td>
                     </tr>
                     <tr>
@@ -192,7 +192,7 @@ function show_settings_form($options) {
                         <th scope="row">Show Share for Coupon Button on Cart Page</th>
                         <td>
                             <input id="show-coupon-button-woocommerce-cart" type="checkbox" name="shop_pe_options[show_coupon_button_woocommerce_cart]" value="1" <?php if ($options['show_coupon_button_woocommerce_cart'] == 1 ) echo 'checked="checked" '; ?>/>
-                            <p class="description">Check this box to show a Share for Coupon button right below your Enter Coupon Code box (great for increasing conversions!). Make sure you set up a Social Reward (<a href="http://help.addshoppers.com/customer/portal/articles/688052-how-to-add-a-social-reward-to-addshoppers-" target="_blank">instructions</a>) first!</p>
+                            <p class="description">Check this box to show a Share for Coupon button right below your Enter Coupon Code box (great for increasing conversions!). Make sure you set up a Social Reward first! (<a href="http://help.addshoppers.com/customer/portal/articles/688052-how-to-add-a-social-reward-to-addshoppers-" target="_blank">Instructions here</a>)</p>
                         </td>
                     </tr>
     <?php } ?>
@@ -494,7 +494,7 @@ if (woocommerce_is_installed()):
 		function addshoppers_roi_tracking( $order_id ) {
    			$order = new WC_Order( $order_id );
    			$options = get_option( 'shop_pe_options' );
-   			show_roi_tracking($options['shop_id'], $order_id, $order->get_order_total());
+   			show_roi_tracking($options['shop_id'], $order_id, $order->get_total());
 		}
 	endif;
 endif;
